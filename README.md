@@ -2,12 +2,12 @@
 This repository contains:
 
 Shell scripts to export data from postgres and import in neo4j:
-* script/sql/createTablesFile.sh generates tables.txt file containing the table names 
+* script/sql/createTablesFile.sh generates tables.txt file containing the names of the tables in postgres database 
 * script/sql/scripts/sql/generateScripts.sh reads from table.txt file and
   * generate the export.sql script (to export data from postgres)
   * generate the import.cypher script to import data into ne04j
 * to run the sql script use psql option \i export.sql 
-* to run the cypher script use the neo4j shell {ne04j dir}/bin/neo4j-shell -file import.cypher
+* to run the cypher script use the neo4j shell {neo4j dir}/bin/neo4j-shell -file import.cypher
 
 Some scripts used to benchmark with a subset of flymine data:
 * script/sql/partial-flymine-export.sql: script to export part of flymine data into csv format files
@@ -17,7 +17,8 @@ Some scripts used to benchmark with a subset of flymine data:
   * to run the script: {neo4j home directory}/bin/neo4j-shell -file {path}/import_flymine.cypher
 * a curl-format text file to use some nice curl options in order to calculate the execution time:
     * curl -w "@curl-format.txt" -s -i -X POST http://localhost:7474/db/data/transaction/commit -d '{"statements" : [ {"statement" : "MATCH(g:Gene) RETURN g"} ]}' -H "Accept:application/json; charset=UTF-8" -H "Content-Type:application/json" -o /dev/null
-* some neo4j server extensions implementing orthologue and overlapping queries using neo4j Java API
-  * after deploying on the server (read neo4j documentation)
-    * curl -w "@curl-format.txt" -s -i http://localhost:7474/examples/orthologue/api/tws
-    * curl -w "@curl-format.txt" -s -i http://localhost:7474/examples/overlapping/api/CG11566
+
+Neo4j server extensions implementing orthologue and overlapping queries using neo4j Java API
+* after deploying on the server (read neo4j documentation)
+  * curl -w "@curl-format.txt" -s -i http://localhost:7474/examples/orthologue/api/tws
+  * curl -w "@curl-format.txt" -s -i http://localhost:7474/examples/overlapping/api/CG11566

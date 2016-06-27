@@ -1,13 +1,11 @@
 # neo4j-benchmark
 This repository contains:
 
-Shell scripts to export data from postgres and import in neo4j:
-* script/sql/createTablesFile.sh generates tables.txt file containing the names of the tables in postgres database 
-* script/sql/scripts/sql/generateScripts.sh reads from table.txt file and
-  * generate the export.sql script (to export data from postgres)
-  * generate the import.cypher script to import data into ne04j
-* to run the sql script use psql option \i export.sql 
-* to run the cypher script use the neo4j shell {neo4j dir}/bin/neo4j-shell -file import.cypher
+Shell scripts to migrate data from postgres to neo4j:
+* script/generateExportScript.sh:read from the file given in input(containing the list of tables to be imported in neo4j) and generate the export.sql script (to export data from postgres)
+* script/generateImportScript.sh: generate the cypher/createNodes.cypher script to create nodes into neo4j
+* to run the sql script use the psql option \i export.sql 
+* to run the cypher scripts use the neo4j shell {neo4j dir}/bin/neo4j-shell -file createNodes.cypher
 
 Some scripts used to benchmark with a subset of flymine data:
 * script/sql/partial-flymine-export.sql: script to export part of flymine data into csv format files

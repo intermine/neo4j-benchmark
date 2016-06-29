@@ -11,15 +11,31 @@ set n :ontologyannotation
 return n;
 
 #ONTOLOGYTERM
-match (n:goterm)
-set n :ontologyterm
-return n;
-
 match (n:anatomyterm)
 set n :ontologyterm
 return n;
 
+match (n:cvterm)
+set n :ontologyterm
+return n;
+
+match (n:developmentterm)
+set n :ontologyterm
+return n;
+
+match (n:goterm)
+set n :ontologyterm
+return n;
+
 match (n:interactionterm)
+set n :ontologyterm
+return n;
+
+match (n:mrnaexpressionterm)
+set n :ontologyterm
+return n;
+
+match (n:soterm)
 set n :ontologyterm
 return n;
 

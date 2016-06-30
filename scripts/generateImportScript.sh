@@ -9,5 +9,6 @@ fi
 
 while read tableName; do
   echo "USING PERIODIC COMMIT LOAD CSV WITH HEADERS FROM \"file:$(pwd)/csv/$tableName.csv\" AS row CREATE (n:$tableName) SET n = row;" >> "$cyperscript"
+  echo "RETURN 'Created $tableName nodes';" >> "$cyperscript"
   echo "CREATE INDEX ON :$tableName(id);" >> "$cyperscript"
 done <"$1"

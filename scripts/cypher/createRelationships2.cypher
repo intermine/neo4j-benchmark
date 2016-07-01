@@ -1,6 +1,6 @@
 //Create IS_PARALOGOUS/IS_ORTHOLOGOUS/IS_LEAST_DIVERGED_ORTHOLOGOUS relationship between genes
 USING PERIODIC COMMIT
-LOAD CSV WITH HEADERS FROM "file:/homologue" AS row
+LOAD CSV WITH HEADERS FROM "file:/home/FILESERVER5/micklem/db539/Projects/git/neo4j-benchmark/scripts/csv/homologuejoindatasetshomologue.csv" AS row
 MATCH (g1:gene {id: row.geneid}), (g2:gene {id: row.homologueid})
 
 FOREACH(ignoreMe IN CASE WHEN row.type="paralogue" AND NOT((g2)-[:IS_PARALOGOUS]->(g1)) THEN [1] ELSE [] END | CREATE (g1)-[h:IS_PARALOGOUS {id: row.id, bootstrapscore: toInt(row.bootstrapscore), dataset: row.dataset}]->(g2))  

@@ -98,11 +98,11 @@ public class Orthologue
     }
 
     private Node findGene(String property, String value) {
-        return database.findNode(IntermineLabel.Gene, property, value);
+        return database.findNode(IntermineLabel.gene, property, value);
     }
 
     private Node findDataSetById(String id) {
-        return database.findNode(IntermineLabel.DataSet, "id", id);
+        return database.findNode(IntermineLabel.dataset, "id", id);
     }
 
     private String getDataSetName(String id) {

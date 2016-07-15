@@ -172,7 +172,7 @@ public class Overlapping
     }
 
     private Node findGene(String property, String value) {
-        return database.findNode(IntermineLabel.Gene, property, value);
+        return database.findNode(IntermineLabel.gene, property, value);
     }
 
     private Gene getGene(Node node) {

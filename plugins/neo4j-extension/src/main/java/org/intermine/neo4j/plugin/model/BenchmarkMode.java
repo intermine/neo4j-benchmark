@@ -1,5 +1,5 @@
-package org.intermine.neo4j.plugin;
+package org.intermine.neo4j.plugin.model;
 
 public enum BenchmarkMode {
-    API, CYPHER, TRAVERSAL
+    API, CYPHER, TRAVERSAL, NO_RELATION
 }

@@ -1,4 +1,4 @@
-package org.intermine.neo4j.plugin;
+package org.intermine.neo4j.plugin.model;
 
 import java.util.ArrayList;
 import java.util.List;

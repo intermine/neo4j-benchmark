@@ -1,7 +1,7 @@
 package org.intermine.neo4j.bolt;
 
-import org.intermine.neo4j.plugin.Gene;
-import org.intermine.neo4j.plugin.LocatedOn;
+import org.intermine.neo4j.plugin.model.Gene;
+import org.intermine.neo4j.plugin.model.LocatedOn;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Record;

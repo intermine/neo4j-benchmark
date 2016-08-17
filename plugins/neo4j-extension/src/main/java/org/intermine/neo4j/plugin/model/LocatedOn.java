@@ -1,10 +1,19 @@
-package org.intermine.neo4j.plugin;
+package org.intermine.neo4j.plugin.model;
 
 public class LocatedOn {
     private String chromosome;
     private long start;
     private long end;
     private long strand;
+
+    public LocatedOn() {
+    }
+    public LocatedOn(long start, long end, long strand) {
+        super();
+        this.start = start;
+        this.end = end;
+        this.strand = strand;
+    }
     public String getChromosome() {
         return chromosome;
     }

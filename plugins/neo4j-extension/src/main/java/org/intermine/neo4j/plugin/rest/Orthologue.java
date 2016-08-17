@@ -1,4 +1,4 @@
-package org.intermine.neo4j.plugin;
+package org.intermine.neo4j.plugin.rest;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +14,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.intermine.neo4j.plugin.model.BenchmarkMode;
+import org.intermine.neo4j.plugin.model.Gene;
+import org.intermine.neo4j.plugin.model.IntermineLabel;
+import org.intermine.neo4j.plugin.model.IntermineRelationships;
+import org.intermine.neo4j.plugin.model.Organism;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;

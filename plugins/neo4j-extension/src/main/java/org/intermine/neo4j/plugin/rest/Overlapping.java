@@ -1,4 +1,4 @@
-package org.intermine.neo4j.plugin;
+package org.intermine.neo4j.plugin.rest;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -19,6 +19,12 @@ import javax.ws.rs.core.StreamingOutput;
 import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.intermine.neo4j.plugin.model.BenchmarkMode;
+import org.intermine.neo4j.plugin.model.Gene;
+import org.intermine.neo4j.plugin.model.IntermineLabel;
+import org.intermine.neo4j.plugin.model.IntermineRelationships;
+import org.intermine.neo4j.plugin.model.LocatedOn;
+import org.intermine.neo4j.plugin.traversal.OverlappingEvaluator;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -61,6 +67,13 @@ public class Overlapping
         return overlapping(lookup, BenchmarkMode.TRAVERSAL);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/norelation/{lookup}")
+    public Response overlappingWithNoRelation(@PathParam( "lookup" ) String lookup ) throws IOException {
+        return overlapping(lookup, BenchmarkMode.NO_RELATION);
+    }
+
     public Response overlapping(String lookup, BenchmarkMode mode) throws IOException {
         long start = System.currentTimeMillis();
         Gene gene = getLookupGene(lookup, mode);
@@ -85,6 +98,8 @@ public class Overlapping
                     gene = getGene(geneNode);
                 } else if (mode == BenchmarkMode.TRAVERSAL) {
                     gene = getGeneWithTraversal(geneNode);
+                }  else if (mode == BenchmarkMode.NO_RELATION) {
+                    gene = getGeneWithNoOverlapsRelation(geneNode);
                 }
             }
             transaction.success();
@@ -204,8 +219,7 @@ public class Overlapping
                 .relationships(IntermineRelationships.OVERLAPS, Direction.BOTH)
                 .evaluator(Evaluators.excludeStartPosition());
         Traverser traverser = traversal.traverse(node);
-        for (org.neo4j.graphdb.Path path : traverser) {
-            Node overlappingGeneNode = path.endNode();
+        for (Node overlappingGeneNode : traverser.nodes()) {
             Gene overlappingGene = new Gene((String) overlappingGeneNode.getProperty("primaryidentifier"));
             overlappingGene.setSymbol((String) overlappingGeneNode.getProperty("symbol"));
             overlappingGene.setLocation(getLocation(overlappingGeneNode));
@@ -213,6 +227,42 @@ public class Overlapping
         }
         gene.setOverlappingGenes(overlappingGenes);
         gene.setLocation(getLocation(node));
+        return gene;
+    }
+
+    private Gene getGeneWithNoOverlapsRelation(Node node) {
+        Gene gene = new Gene();
+        gene.setPrimaryIdentifier((String) node.getProperty("primaryidentifier"));
+        gene.setSecondaryIdentifier((String) node.getProperty("secondaryidentifier"));
+        gene.setSymbol((String) node.getProperty("symbol"));
+        List<Gene> overlappingGenes = new ArrayList<Gene>();
+        TraversalDescription traversal = database.traversalDescription()
+                .breadthFirst()
+                .relationships(IntermineRelationships.LOCATED_ON, Direction.OUTGOING)
+                .evaluator(Evaluators.toDepth(1));
+        Traverser traverser = traversal.traverse(node);
+        long start = 0;
+        long end = 0;
+        long strand = 0;
+        for (Relationship locatedOn : traverser.relationships()) {
+            start = (Long)locatedOn.getProperty("start");
+            end = (Long)locatedOn.getProperty("end");
+            strand = (Long)locatedOn.getProperty("strand");
+            break;
+        }
+        TraversalDescription overlappingTraversal = database.traversalDescription()
+                .breadthFirst()
+                .relationships(IntermineRelationships.LOCATED_ON, Direction.BOTH)
+                .evaluator(new OverlappingEvaluator(start, end));
+        Traverser overlappingTraverser = overlappingTraversal.traverse(node);
+        for (Node overlappingGeneNode : overlappingTraverser.nodes()) {
+            Gene overlappingGene = new Gene((String) overlappingGeneNode.getProperty("primaryidentifier"));
+            overlappingGene.setSymbol((String) overlappingGeneNode.getProperty("symbol"));
+            overlappingGene.setLocation(getLocation(overlappingGeneNode));
+            overlappingGenes.add(overlappingGene);
+        }
+        gene.setOverlappingGenes(overlappingGenes);
+        gene.setLocation(new LocatedOn(start, end, strand));
         return gene;
     }
 

@@ -1,4 +1,4 @@
-package org.intermine.neo4j.plugin;
+package org.intermine.neo4j.plugin.model;
 
 import org.neo4j.graphdb.Label;
 

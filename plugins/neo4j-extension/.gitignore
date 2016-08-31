@@ -4,3 +4,4 @@
 /target/maven-status/
 /target/test-classes/
 .settings/
+/target/

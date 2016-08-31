@@ -28,6 +28,7 @@ import org.intermine.neo4j.plugin.traversal.OverlappingEvaluator;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.NotFoundException;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
@@ -197,11 +198,17 @@ public class Overlapping
         gene.setSymbol((String) node.getProperty("symbol"));
         List<Gene> overlappingGenes = new ArrayList<Gene>();
         for (Relationship overlaps : node.getRelationships(IntermineRelationships.OVERLAPS, Direction.BOTH)) {
-            Node overlappingGeneNode = (overlaps.getStartNode().getId() != node.getId()) ? overlaps.getStartNode() : overlaps.getEndNode();
-            Gene overlappingGene = new Gene((String) overlappingGeneNode.getProperty("primaryidentifier"));
-            overlappingGene.setSymbol((String) overlappingGeneNode.getProperty("symbol"));
-            overlappingGene.setLocation(getLocation(overlappingGeneNode));
-            overlappingGenes.add(overlappingGene);
+            Node overlappingGeneNode = overlaps.getOtherNode(node);
+            if (overlappingGeneNode.hasLabel(IntermineLabel.gene)) {
+                Gene overlappingGene = new Gene((String) overlappingGeneNode.getProperty("primaryidentifier"));
+                try {
+                    overlappingGene.setSymbol((String) overlappingGeneNode.getProperty("symbol"));
+                } catch (NotFoundException nfe) {
+                    log.info("the node " + (String) overlappingGeneNode.getProperty("primaryidentifier") + " doesn't have a symbol");
+                }
+                overlappingGene.setLocation(getLocation(overlappingGeneNode));
+                overlappingGenes.add(overlappingGene);
+            }
         }
         gene.setOverlappingGenes(overlappingGenes);
         gene.setLocation(getLocation(node));

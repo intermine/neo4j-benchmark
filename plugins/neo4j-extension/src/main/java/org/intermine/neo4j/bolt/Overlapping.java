@@ -2,11 +2,11 @@ package org.intermine.neo4j.bolt;
 
 import org.intermine.neo4j.plugin.model.Gene;
 import org.intermine.neo4j.plugin.model.LocatedOn;
-import org.neo4j.driver.v1.Driver;
-import org.neo4j.driver.v1.GraphDatabase;
-import org.neo4j.driver.v1.Record;
-import org.neo4j.driver.v1.Session;
-import org.neo4j.driver.v1.StatementResult;
+//import org.neo4j.driver.v1.Driver;
+//import org.neo4j.driver.v1.GraphDatabase;
+//import org.neo4j.driver.v1.Record;
+//import org.neo4j.driver.v1.Session;
+//import org.neo4j.driver.v1.StatementResult;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,7 +14,7 @@ import com.google.gson.GsonBuilder;
 public class Overlapping {
     
     public static void main(String[] args) {
-        Driver driver = GraphDatabase.driver( "bolt://localhost:7687");
+/*        Driver driver = GraphDatabase.driver( "bolt://localhost:7687");
         Session session = driver.session();
         long start = System.currentTimeMillis();
         StatementResult result = session.run(getQueryString());
@@ -23,7 +23,7 @@ public class Overlapping {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         System.out.println(gson.toJson(gene));
         session.close();
-        driver.close();
+        driver.close();*/
     }
 
     private static String getQueryString() {
@@ -32,7 +32,7 @@ public class Overlapping {
                 + "ch.primaryidentifier as chprimaryidentifier, g2.primaryidentifier as oprimaryidentifier, g2.symbol as osymbol, l2.start as ostart, l2.end as oend, l2.strand as ostrand ORDER BY g.primaryidentifier";
     }
 
-    private static Gene getGene(final StatementResult result) {
+/*    private static Gene getGene(final StatementResult result) {
         Gene gene = new Gene();
         Record record = result.next();
         if (record != null) {
@@ -66,5 +66,5 @@ public class Overlapping {
             gene.addOverlappingGene(overlappingGene);
         }
         return gene;
-    }
+    }*/
 }

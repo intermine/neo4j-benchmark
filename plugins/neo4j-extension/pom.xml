@@ -33,12 +33,12 @@
     <version>1.9.13</version>
     <scope>provided</scope>
   </dependency>
-  <dependency>
+<!--   <dependency>
     <groupId>org.neo4j.driver</groupId>
     <artifactId>neo4j-java-driver</artifactId>
     <version>1.0.2</version>
     <scope>provided</scope>
-  </dependency>
+  </dependency> -->
   </dependencies>
 
   <build>

@@ -1,4 +1,4 @@
-package org.intermine.neo4j.bolt;
+package org.intermine.neo4j.plugin.bolt;
 
 import org.intermine.neo4j.plugin.model.Gene;
 import org.intermine.neo4j.plugin.model.LocatedOn;

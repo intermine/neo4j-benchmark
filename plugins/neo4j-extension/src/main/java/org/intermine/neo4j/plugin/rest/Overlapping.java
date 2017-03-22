@@ -223,7 +223,11 @@ public class Overlapping
         Gene gene = new Gene();
         gene.setPrimaryIdentifier((String) node.getProperty("primaryidentifier"));
         gene.setSecondaryIdentifier((String) node.getProperty("secondaryidentifier"));
-        gene.setSymbol((String) node.getProperty("symbol"));
+        try {
+            gene.setSymbol((String) node.getProperty("symbol"));
+        } catch (NotFoundException nfe) {
+            log.info("the node " + (String) node.getProperty("primaryidentifier") + " doesn't have a symbol");
+        }
         List<Gene> overlappingGenes = new ArrayList<Gene>();
         TraversalDescription traversal = database.traversalDescription()
                 .breadthFirst()

@@ -113,7 +113,7 @@ public class Overlapping
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/streaming/{lookup}")
-    public Response overlappingWitStreaming(@PathParam( "lookup" ) String lookup) throws IOException {
+    public Response overlappingWitStreaming(@PathParam( "lookup" ) final String lookup) throws IOException {
         StreamingOutput stream = new StreamingOutput() {
             @Override
             public void write(OutputStream os) throws IOException, WebApplicationException {
@@ -236,7 +236,11 @@ public class Overlapping
         Traverser traverser = traversal.traverse(node);
         for (Node overlappingGeneNode : traverser.nodes()) {
             Gene overlappingGene = new Gene((String) overlappingGeneNode.getProperty("primaryidentifier"));
-            overlappingGene.setSymbol((String) overlappingGeneNode.getProperty("symbol"));
+            try {
+            	overlappingGene.setSymbol((String) overlappingGeneNode.getProperty("symbol"));
+            } catch (NotFoundException nfe) {
+                log.info("the node " + (String) node.getProperty("primaryidentifier") + " doesn't have a symbol");
+            }
             overlappingGene.setLocation(getLocation(overlappingGeneNode));
             overlappingGenes.add(overlappingGene);
         }
